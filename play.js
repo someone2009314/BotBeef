@@ -8,7 +8,7 @@
 //       method: "POST",
 //       headers: {
 //         "Content-Type": "application/json",
-//         Authorization: `Bearer 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`,
+//         Authorization: `Bearer ` + API_KEY,
 //       },
 //       body: JSON.stringify({
 //         model: "tts-1",
