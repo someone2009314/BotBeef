@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playwrite+DK+Loopet:wght@100..400&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" src="play.js"></script>
+    <title>BotBeef - Beef</title>
+
+    <link rel="stylesheet" href="main.css" />
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background-color: #111;
+        color: white;
+      }
+      .container {
+        display: flex;
+        gap: 40px;
+        justify-content: center;
+        align-items: center;
+      }
+      .visualizer-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      canvas {
+        border-radius: 50%;
+        background-color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <audio id="audio" controls></audio>
+
+    <div class="container">
+      <div class="visualizer-box">
+        <canvas
+          style="
+            background: url(kendricklamar.webp);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+          "
+          id="visualizer1"
+          width="300"
+          height="300"
+        ></canvas>
+      </div>
+      <div class="visualizer-box">
+        <canvas
+          style="
+            background: url(Drake.webp);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+          "
+          id="visualizer2"
+          width="300"
+          height="300"
+        ></canvas>
+      </div>
+    </div>
+
+    <script>
+      const fileInput = document.getElementById("audioFile");
+      const audio = document.getElementById("audio");
+      const canvas1 = document.getElementById("visualizer1");
+      const canvas2 = document.getElementById("visualizer2");
+      let audioCtx, analyser, source, dataArray;
+
+      function setupVisualizer(canvas) {
+        const ctx = canvas.getContext("2d");
+
+        function setupAudio() {
+          if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 256;
+            dataArray = new Uint8Array(analyser.frequencyBinCount);
+            source = audioCtx.createMediaElementSource(audio);
+            source.connect(analyser);
+            analyser.connect(audioCtx.destination);
+          }
+          draw();
+        }
+
+        function draw() {
+          requestAnimationFrame(draw);
+          analyser.getByteFrequencyData(dataArray);
+
+          ctx.clearRect(0, 0, canvas.width, canvas.height); // Clears only the previous drawings, keeping the background image
+
+          const centerX = canvas.width / 2;
+          const centerY = canvas.height / 2;
+          const radius = 80;
+
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+          ctx.strokeStyle = "white";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          for (let i = 0; i < dataArray.length; i++) {
+            let angle = (i / dataArray.length) * Math.PI * 2;
+            let barHeight = dataArray[i] / 2;
+            let x1 = centerX + Math.cos(angle) * radius;
+            let y1 = centerY + Math.sin(angle) * radius;
+            let x2 = centerX + Math.cos(angle) * (radius + barHeight);
+            let y2 = centerY + Math.sin(angle) * (radius + barHeight);
+
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.strokeStyle = `hsl(${i * 2}, 100%, 50%)`;
+            ctx.lineWidth = 3;
+            ctx.stroke();
+          }
+        }
+
+        return setupAudio;
+      }
+
+      const startVisualizer1 = setupVisualizer(canvas1);
+      const startVisualizer2 = setupVisualizer(canvas2);
+
+      fileInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          const objectURL = URL.createObjectURL(file);
+          audio.src = objectURL;
+          audio
+            .play()
+            .then(() => {
+              startVisualizer1();
+              startVisualizer2();
+            })
+            .catch((error) => console.error("Audio playback error:", error));
+        }
+      });
+    </script>
+    <div
+      id="subtitles"
+      style="text-align: center; font-family: Playwrite DK Loopet"
+    >
+      <h2>SUBTITLES</h2>
+      <p id="subtitlesp">
+        example example example example example example example example example
+        example example example example example
+      </p>
+    </div>
+  </body>
+</html>

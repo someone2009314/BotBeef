@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BotBeef - Log In</title>
+    <link rel="stylesheet" href="main.css" />
+    <!-- Link to the existing CSS file -->
+    <script src="prompt.js"></script>
+
+    <style>
+      body {
+        background: linear-gradient(180deg, #0b3d91, #000d33);
+        color: white;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        font-family: "Arial", sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="login-box">
+        <h2 class="login-title">Enter Prompt</h2>
+        <form class="login-form">
+          <div class="input-group">
+            <label for="email-username">Username</label>
+            <input
+              type="text"
+              id="email-username"
+              placeholder="Enter your email or username"
+              required
+            />
+          </div>
+          <div class="input-group">
+            <label>Prompt</label>
+            <input
+              type="text"
+              id="prompt"
+              placeholder="ex: on an airplane"
+              required
+            />
+          </div>
+          <button
+            type="button"
+            onclick="rap(); return false;"
+            class="login-btn"
+          >
+            Enter
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
