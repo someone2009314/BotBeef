@@ -17,7 +17,7 @@ async function text() {
       headers: {
         "Content-Type": "application/json",
         Authorization:
-          "Bearer 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", // Make sure API_KEY is defined
+          "Bearer " + API_KEY, // Make sure API_KEY is defined
       },
       body: JSON.stringify({
         temperature: 1.0,
